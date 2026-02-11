@@ -37,10 +37,34 @@ const TS = 32;
 // p5 preload: load assets/data
 // ----------------------------
 
+// New level generator function
+
+function generateNewLevel(rows, cols) {
+  const level = [];
+
+  for (let r = 0; r < rows; r++) {
+    const row = [];
+    for (let c = 0; c < cols; c++) {
+      // Create a simple maze-like pattern
+      if (r === 0 || r === rows - 1 || c === 0 || c === cols - 1) {
+        row.push(1); // Wall on edges
+      } else {
+        row.push(0); // Floor inside
+      }
+    }
+    level.push(row);
+  }
+
+  return level;
+}
+
 function preload() {
   // loadJSON runs in preload so that by the time setup() runs,
   // we can safely read levelsData.levels.
   levelsData = loadJSON("levels.json");
+
+  const newLevel = generateNewLevel(9, 12);
+  levelsData.levels.push(newLevel);
 }
 
 // ----------------------------
@@ -141,7 +165,7 @@ function draw() {
   levels[current].draw();
 
   // Simple UI label (“press N for next”).
-  fill(0);
+  fill(255);
   text("Level " + (current + 1) + " — press N for next", 10, 16);
 }
 
